@@ -2,4 +2,6 @@
     <string name="app_name">ProjecteCafeteriaDavidGelmaCorral2nDAM</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="drawer_obrir">Obrir menu</string>
+    <string name="drawer_tancar">Tancar menu</string>
 </resources>
