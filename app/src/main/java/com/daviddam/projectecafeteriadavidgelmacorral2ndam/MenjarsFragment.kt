@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,8 +35,20 @@ class MenjarsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_menjars, container, false)
+        val view = inflater.inflate(R.layout.fragment_menjars, container, false)
+        val recyclerProductes = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerProductes)
+        recyclerProductes.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
+
+        val viewModelMenjars: viewmodel.MenjarViewModel by viewModels()
+        val modelCompartit: viewmodel.SharedViewModel by activityViewModels()
+
+        viewModelMenjars.menjarProductes.observe(viewLifecycleOwner) { llista ->
+            recyclerProductes.adapter = adapter.ProducteAdapter(llista) { producte ->
+                modelCompartit.afegirProducte(producte)
+            }
+        }
+
+        return view
     }
 
     companion object {

@@ -23,21 +23,20 @@ class LoginActivity : AppCompatActivity() {
 
         btnLogin.setOnClickListener {
 
-            val usuariInput = etUser.text.toString()
-            val contrasenyaInput = etContrasenya.text.toString()
+            val usuariInput = etUser.text.toString().trim()
+            val contrasenyaInput = etContrasenya.text.toString().trim()
 
-            val usuariGuardat = sharedPref.getUsuari()
-            val contrasenyaGuardada = sharedPref.getContrasenya()
+            if (usuariInput.isEmpty() || contrasenyaInput.isEmpty()) {
+                Toast.makeText(this, "Omple els camps", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-            if (usuariInput == usuariGuardat && contrasenyaInput == contrasenyaGuardada) {
-
-                sharedPref.setEstaLogat(true)
+            if (sharedPref.validarCredencials(usuariInput, contrasenyaInput)) {
+                sharedPref.setSessioUsuari(usuariInput)
                 val intent = Intent(this, MainActivity::class.java)
-
-                intent.putExtra("USER", usuariGuardat)
+                intent.putExtra("USER", usuariInput)
                 startActivity(intent)
                 finish()
-
             } else {
                 Toast.makeText(this, "Usuari o contrasenya incorrectes", Toast.LENGTH_SHORT).show()
             }

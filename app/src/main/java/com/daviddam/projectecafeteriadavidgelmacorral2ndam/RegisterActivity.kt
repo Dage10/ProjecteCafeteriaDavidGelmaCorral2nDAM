@@ -22,14 +22,23 @@ class RegisterActivity : AppCompatActivity() {
         val sharedPref = SharedPreference(this)
 
         btnRegistre.setOnClickListener {
-            val usuari = campUsuari.text.toString()
-            val contrasenya = campContrasenya.text.toString()
+            val usuari = campUsuari.text.toString().trim()
+            val contrasenya = campContrasenya.text.toString().trim()
 
-            sharedPref.guardarUsuari(usuari,contrasenya)
+            if (usuari.isEmpty() || contrasenya.isEmpty()) {
+                android.widget.Toast.makeText(this, "Omple usuari i contrasenya", android.widget.Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-            val intent = Intent(this, LoginActivity::class.java)
-
-            startActivity(intent)
+            val ok = sharedPref.registrarUsuari(usuari, contrasenya)
+            if (ok) {
+                android.widget.Toast.makeText(this, "Usuari registrat", android.widget.Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
+            } else {
+                android.widget.Toast.makeText(this, "L'usuari ja existeix", android.widget.Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

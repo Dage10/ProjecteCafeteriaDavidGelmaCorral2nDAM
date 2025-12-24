@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,8 +35,38 @@ class PagamentFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pagament, container, false)
+        val view = inflater.inflate(R.layout.fragment_pagament, container, false)
+        val recycler = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerSeleccionat)
+        recycler.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
+
+        val tvTotal = view.findViewById<android.widget.TextView>(R.id.tvTotal)
+        val btnPagar = view.findViewById<android.widget.Button>(R.id.btnPagar)
+
+        val modelCompartit: viewmodel.SharedViewModel by activityViewModels()
+        val vmPagament: viewmodel.PagamentViewModel by viewModels()
+        val preferencies = sharedPreference.SharedPreference(requireContext())
+
+        modelCompartit.productesSeleccionats.observe(viewLifecycleOwner) { llista ->
+            recycler.adapter = adapter.ProducteAdapter(llista) { /* ja seleccionat */ }
+        }
+
+        modelCompartit.preuTotal.observe(viewLifecycleOwner) { total ->
+            tvTotal.text = "Total: ${total} €"
+        }
+
+        btnPagar.setOnClickListener {
+            val usuari = preferencies.getUsuari() ?: "unknown"
+            val total = modelCompartit.preuTotal.value ?: 0.0
+            if (total > 0.0) {
+                vmPagament.pagar(usuari, total)
+                modelCompartit.eliminarProductes()
+                android.widget.Toast.makeText(requireContext(), "Comanda registrada", android.widget.Toast.LENGTH_SHORT).show()
+            } else {
+                android.widget.Toast.makeText(requireContext(), "No hi ha cap producte", android.widget.Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        return view
     }
 
     companion object {

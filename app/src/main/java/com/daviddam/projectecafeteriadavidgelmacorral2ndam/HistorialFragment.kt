@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,8 +34,51 @@ class HistorialFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_historial, container, false)
+        val view = inflater.inflate(R.layout.fragment_historial, container, false)
+        val recycler = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerComandes)
+        recycler.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
+
+        val sharedPref = sharedPreference.SharedPreference(requireContext())
+        val usuari = sharedPref.getUsuari() ?: "unknown"
+
+        val vmHistorial: viewmodel.HistorialViewModel by viewModels()
+
+        vmHistorial.getOrdresUsuari(usuari).observe(viewLifecycleOwner) { llistaComandes ->
+            recycler.adapter = adapter.ComandaAdapter(
+                llistaComandes,
+                onEliminar = { comanda ->
+                    androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                        .setTitle("Eliminar comanda")
+                        .setMessage("Segur que vols eliminar la comanda?")
+                        .setPositiveButton("Eliminar") { _, _ ->
+                            vmHistorial.deleteComanda(comanda)
+                            android.widget.Toast.makeText(requireContext(), "Comanda eliminada", android.widget.Toast.LENGTH_SHORT).show()
+                        }
+                        .setNegativeButton("Cancel·lar", null)
+                        .show()
+                },
+                onEditar = { comanda ->
+                    val et = android.widget.EditText(requireContext())
+                    et.inputType = android.text.InputType.TYPE_CLASS_NUMBER or android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
+                    et.setText(String.format("%.2f", comanda.total))
+                    androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                        .setTitle("Modificar preu")
+                        .setView(et)
+                        .setPositiveButton("Guardar") { _, _ ->
+                            val text = et.text.toString().replace(',', '.')
+                            val newTotal = text.toDoubleOrNull()
+                            if (newTotal != null) {
+                                vmHistorial.updateComanda(comanda.copy(total = newTotal))
+                                android.widget.Toast.makeText(requireContext(), "Comanda actualitzada", android.widget.Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        .setNegativeButton("Cancel·lar", null)
+                        .show()
+                }
+            )
+        }
+
+        return view
     }
 
     companion object {
