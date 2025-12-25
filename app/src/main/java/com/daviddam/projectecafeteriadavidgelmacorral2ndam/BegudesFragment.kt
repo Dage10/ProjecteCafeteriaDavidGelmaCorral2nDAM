@@ -43,7 +43,7 @@ class BegudesFragment : Fragment() {
         val modelCompartit: viewmodel.SharedViewModel by activityViewModels()
 
         viewModelBegudes.begudaProductes.observe(viewLifecycleOwner) { llista ->
-            recyclerProductes.adapter = adapter.ProducteAdapter(llista) { producte -> modelCompartit.afegirProducte(producte) }
+            recyclerProductes.adapter = adapter.ProducteAdapter(llista, alClicar = { producte -> modelCompartit.afegirProducte(producte)})
         }
 
         return view

@@ -43,9 +43,9 @@ class MenjarsFragment : Fragment() {
         val modelCompartit: viewmodel.SharedViewModel by activityViewModels()
 
         viewModelMenjars.menjarProductes.observe(viewLifecycleOwner) { llista ->
-            recyclerProductes.adapter = adapter.ProducteAdapter(llista) { producte ->
+            recyclerProductes.adapter = adapter.ProducteAdapter(llista, alClicar = { producte ->
                 modelCompartit.afegirProducte(producte)
-            }
+            })
         }
 
         return view

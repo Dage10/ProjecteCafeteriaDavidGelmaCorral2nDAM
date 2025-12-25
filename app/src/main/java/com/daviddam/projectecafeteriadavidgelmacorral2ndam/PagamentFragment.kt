@@ -39,7 +39,6 @@ class PagamentFragment : Fragment() {
         val recycler = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerSeleccionat)
         recycler.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
 
-        val tvTotal = view.findViewById<android.widget.TextView>(R.id.tvTotal)
         val btnPagar = view.findViewById<android.widget.Button>(R.id.btnPagar)
 
         val modelCompartit: viewmodel.SharedViewModel by activityViewModels()
@@ -47,12 +46,9 @@ class PagamentFragment : Fragment() {
         val preferencies = sharedPreference.SharedPreference(requireContext())
 
         modelCompartit.productesSeleccionats.observe(viewLifecycleOwner) { llista ->
-            recycler.adapter = adapter.ProducteAdapter(llista) { /* ja seleccionat */ }
+            recycler.adapter = adapter.ProducteAdapter(llista, alClicar = {}, mostrarToast = false)
         }
 
-        modelCompartit.preuTotal.observe(viewLifecycleOwner) { total ->
-            tvTotal.text = "Total: ${total} €"
-        }
 
         btnPagar.setOnClickListener {
             val usuari = preferencies.getUsuari() ?: "unknown"

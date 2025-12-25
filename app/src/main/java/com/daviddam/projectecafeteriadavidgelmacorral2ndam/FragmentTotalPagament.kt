@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.fragment.app.activityViewModels
 
 // TODO: Rename parameter arguments, choose names that match
@@ -15,10 +14,10 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [PostresFragment.newInstance] factory method to
+ * Use the [FragmentTotalPagament.newInstance] factory method to
  * create an instance of this fragment.
  */
-class PostresFragment : Fragment() {
+class FragmentTotalPagament : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -35,15 +34,17 @@ class PostresFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_postres, container, false)
-        val recyclerProductes = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerProductes)
-        recyclerProductes.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
+        val view = inflater.inflate(R.layout.fragment_total_pagament, container, false)
 
-        val viewModelPostres: viewmodel.PostresViewModel by viewModels()
+        val tvTotal = view.findViewById<android.widget.TextView>(R.id.tvTotal)
+
         val modelCompartit: viewmodel.SharedViewModel by activityViewModels()
 
-        viewModelPostres.postresProductes.observe(viewLifecycleOwner) { llista ->
-            recyclerProductes.adapter = adapter.ProducteAdapter(llista, alClicar = { producte -> modelCompartit.afegirProducte(producte) })
+        view.visibility = View.GONE
+
+        modelCompartit.preuTotal.observe(viewLifecycleOwner) { total ->
+            tvTotal.text = String.format("Total: %.2f €", total)
+            view.visibility = if (total > 0.0) View.VISIBLE else View.GONE
         }
 
         return view
@@ -56,12 +57,12 @@ class PostresFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment PostresFragment.
+         * @return A new instance of fragment FragmentTotalPagament.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            PostresFragment().apply {
+            FragmentTotalPagament().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

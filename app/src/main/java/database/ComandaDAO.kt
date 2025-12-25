@@ -13,8 +13,8 @@ interface ComandaDAO {
     suspend fun insertarComanda(comanda: ComandaEntity)
 
     @Update
-    suspend fun updateOrder(comanda: ComandaEntity)
+    suspend fun updateComanda(comanda: ComandaEntity)
 
     @Delete
-    suspend fun deleteOrder(comanda: ComandaEntity)
+    suspend fun deleteComanda(comanda: ComandaEntity)
 }

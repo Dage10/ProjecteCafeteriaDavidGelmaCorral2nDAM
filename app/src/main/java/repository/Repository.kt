@@ -13,12 +13,12 @@ class Repository(private val comandaDao: ComandaDAO,
         comandaDao.obtenirOrdresUsuari(usuari)
 
     suspend fun insertComanda(comanda: ComandaEntity) = comandaDao.insertarComanda(comanda)
-    suspend fun updateComanda(comanda: ComandaEntity) = comandaDao.updateOrder(comanda)
-    suspend fun deleteComanda(comanda: ComandaEntity) = comandaDao.deleteOrder(comanda)
+    suspend fun updateComanda(comanda: ComandaEntity) = comandaDao.updateComanda(comanda)
+    suspend fun deleteComanda(comanda: ComandaEntity) = comandaDao.deleteComanda(comanda)
 
     fun getProductesPerCategoria(categoria: String): LiveData<List<ProducteEntity>> =
         producteDao.getProductesCategoria(categoria)
 
-    suspend fun insertProduct(producte: ProducteEntity) = producteDao.insertarProducte(producte)
-    suspend fun deleteProduct(producte: ProducteEntity) = producteDao.eliminarProduct(producte)
+    suspend fun insertProducte(producte: ProducteEntity) = producteDao.insertarProducte(producte)
+    suspend fun deleteProducte(producte: ProducteEntity) = producteDao.eliminarProduct(producte)
 }

@@ -10,7 +10,8 @@ import entity.ProducteEntity
 
 class ProducteAdapter(
     private val llistaProductes: List<ProducteEntity>,
-    private val alClicar: (ProducteEntity) -> Unit
+    private val alClicar: (ProducteEntity) -> Unit,
+    private val mostrarToast: Boolean = true
 ) : RecyclerView.Adapter<ProducteAdapter.ProductViewHolder>() {
 
     inner class ProductViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
@@ -31,7 +32,9 @@ class ProducteAdapter(
             holder.itemView.animate().alpha(0.6f).setDuration(80).withEndAction {
                 holder.itemView.animate().alpha(1f).setDuration(150).start()
             }.start()
-            android.widget.Toast.makeText(holder.itemView.context, "Producte afegit", android.widget.Toast.LENGTH_SHORT).show()
+            if (mostrarToast) {
+                android.widget.Toast.makeText(holder.itemView.context, "Producte afegit", android.widget.Toast.LENGTH_SHORT).show()
+            }
             alClicar(producte)
         }
     }

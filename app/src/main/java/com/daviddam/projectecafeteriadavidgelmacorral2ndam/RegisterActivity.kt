@@ -30,8 +30,8 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val ok = sharedPref.registrarUsuari(usuari, contrasenya)
-            if (ok) {
+            val comprovar = sharedPref.registrarUsuari(usuari, contrasenya)
+            if (comprovar) {
                 android.widget.Toast.makeText(this, "Usuari registrat", android.widget.Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)

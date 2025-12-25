@@ -23,7 +23,7 @@ class MenjarViewModel(application: Application) : AndroidViewModel(application) 
 
     fun afegirProducte(producte: ProducteEntity) {
         viewModelScope.launch {
-            repository.insertProduct(producte)
+            repository.insertProducte(producte)
         }
     }
 }
