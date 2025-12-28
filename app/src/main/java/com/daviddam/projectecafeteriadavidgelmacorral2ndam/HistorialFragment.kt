@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import com.daviddam.projectecafeteriadavidgelmacorral2ndam.databinding.FragmentHistorialBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,13 +31,14 @@ class HistorialFragment : Fragment() {
         }
     }
 
+    private lateinit var binding: FragmentHistorialBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_historial, container, false)
-        val recycler = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerComandes)
-        recycler.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
+    ): View {
+        binding = FragmentHistorialBinding.inflate(inflater, container, false)
+        binding.recyclerComandes.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
 
         val sharedPref = sharedPreference.SharedPreference(requireContext())
         val usuari = sharedPref.getUsuari() ?: "unknown"
@@ -44,7 +46,7 @@ class HistorialFragment : Fragment() {
         val vmHistorial: viewmodel.HistorialViewModel by viewModels()
 
         vmHistorial.getOrdresUsuari(usuari).observe(viewLifecycleOwner) { llistaComandes ->
-            recycler.adapter = adapter.ComandaAdapter(
+            binding.recyclerComandes.adapter = adapter.ComandaAdapter(
                 llistaComandes,
                 onEliminar = { comanda ->
                     androidx.appcompat.app.AlertDialog.Builder(requireContext())
@@ -78,7 +80,7 @@ class HistorialFragment : Fragment() {
             )
         }
 
-        return view
+        return binding.root
     }
 
     companion object {

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.fragment.app.activityViewModels
+import com.daviddam.projectecafeteriadavidgelmacorral2ndam.databinding.FragmentPagamentBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,26 +32,24 @@ class PagamentFragment : Fragment() {
         }
     }
 
+    private lateinit var binding: FragmentPagamentBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_pagament, container, false)
-        val recycler = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerSeleccionat)
-        recycler.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
-
-        val btnPagar = view.findViewById<android.widget.Button>(R.id.btnPagar)
+    ): View {
+        binding = FragmentPagamentBinding.inflate(inflater, container, false)
+        binding.recyclerSeleccionat.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
 
         val modelCompartit: viewmodel.SharedViewModel by activityViewModels()
         val vmPagament: viewmodel.PagamentViewModel by viewModels()
         val preferencies = sharedPreference.SharedPreference(requireContext())
 
         modelCompartit.productesSeleccionats.observe(viewLifecycleOwner) { llista ->
-            recycler.adapter = adapter.ProducteAdapter(llista, alClicar = {}, mostrarToast = false)
+            binding.recyclerSeleccionat.adapter = adapter.ProducteAdapter(llista, alClicar = {}, mostrarToast = false)
         }
 
-
-        btnPagar.setOnClickListener {
+        binding.btnPagar.setOnClickListener {
             val usuari = preferencies.getUsuari() ?: "unknown"
             val total = modelCompartit.preuTotal.value ?: 0.0
             if (total > 0.0) {
@@ -62,7 +61,7 @@ class PagamentFragment : Fragment() {
             }
         }
 
-        return view
+        return binding.root
     }
 
     companion object {

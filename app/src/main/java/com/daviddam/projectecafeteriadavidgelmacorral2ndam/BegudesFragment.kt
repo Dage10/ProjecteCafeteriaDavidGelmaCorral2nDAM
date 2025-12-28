@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.fragment.app.activityViewModels
+import com.daviddam.projectecafeteriadavidgelmacorral2ndam.databinding.FragmentBegudesBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,22 +32,23 @@ class BegudesFragment : Fragment() {
         }
     }
 
+    private lateinit var binding: FragmentBegudesBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_begudes, container, false)
-        val recyclerProductes = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerProductes)
-        recyclerProductes.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
+    ): View {
+        binding = FragmentBegudesBinding.inflate(inflater, container, false)
+        binding.recyclerProductes.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
 
         val viewModelBegudes: viewmodel.BegudesViewModel by viewModels()
         val modelCompartit: viewmodel.SharedViewModel by activityViewModels()
 
         viewModelBegudes.begudaProductes.observe(viewLifecycleOwner) { llista ->
-            recyclerProductes.adapter = adapter.ProducteAdapter(llista, alClicar = { producte -> modelCompartit.afegirProducte(producte)})
+            binding.recyclerProductes.adapter = adapter.ProducteAdapter(llista, alClicar = { producte -> modelCompartit.afegirProducte(producte)})
         }
 
-        return view
+        return binding.root
     }
 
     companion object {

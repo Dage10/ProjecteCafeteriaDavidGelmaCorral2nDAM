@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import com.daviddam.projectecafeteriadavidgelmacorral2ndam.databinding.FragmentTotalPagamentBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,24 +31,24 @@ class FragmentTotalPagament : Fragment() {
         }
     }
 
+    private lateinit var binding: FragmentTotalPagamentBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_total_pagament, container, false)
-
-        val tvTotal = view.findViewById<android.widget.TextView>(R.id.tvTotal)
+    ): View {
+        binding = FragmentTotalPagamentBinding.inflate(inflater, container, false)
 
         val modelCompartit: viewmodel.SharedViewModel by activityViewModels()
 
-        view.visibility = View.GONE
+        binding.root.visibility = View.GONE
 
         modelCompartit.preuTotal.observe(viewLifecycleOwner) { total ->
-            tvTotal.text = String.format("Total: %.2f €", total)
-            view.visibility = if (total > 0.0) View.VISIBLE else View.GONE
+            binding.tvTotal.text = String.format("Total: %.2f €", total)
+            binding.root.visibility = if (total > 0.0) View.VISIBLE else View.GONE
         }
 
-        return view
+        return binding.root
     }
 
     companion object {

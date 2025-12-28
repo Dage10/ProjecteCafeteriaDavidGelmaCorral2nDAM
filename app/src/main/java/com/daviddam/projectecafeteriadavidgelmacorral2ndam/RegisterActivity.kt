@@ -2,28 +2,25 @@ package com.daviddam.projectecafeteriadavidgelmacorral2ndam
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.daviddam.projectecafeteriadavidgelmacorral2ndam.databinding.ActivityRegisterBinding
 import sharedPreference.SharedPreference
 
 class RegisterActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityRegisterBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_register)
-
-        val campUsuari = findViewById<EditText>(R.id.etUsuari)
-        val campContrasenya = findViewById<EditText>(R.id.etContrasenya)
-
-        val btnRegistre = findViewById<Button>(R.id.btnRegistre)
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val sharedPref = SharedPreference(this)
 
-        btnRegistre.setOnClickListener {
-            val usuari = campUsuari.text.toString().trim()
-            val contrasenya = campContrasenya.text.toString().trim()
+        binding.btnRegistre.setOnClickListener {
+            val usuari = binding.etUsuari.text.toString().trim()
+            val contrasenya = binding.etContrasenya.text.toString().trim()
 
             if (usuari.isEmpty() || contrasenya.isEmpty()) {
                 android.widget.Toast.makeText(this, "Omple usuari i contrasenya", android.widget.Toast.LENGTH_SHORT).show()
