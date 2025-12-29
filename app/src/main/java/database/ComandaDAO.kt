@@ -10,7 +10,7 @@ interface ComandaDAO {
     fun obtenirOrdresUsuari(usuari: String): LiveData<List<ComandaEntity>>
 
     @Insert
-    suspend fun insertarComanda(comanda: ComandaEntity)
+    suspend fun insertarComanda(comanda: ComandaEntity): Long
 
     @Update
     suspend fun updateComanda(comanda: ComandaEntity)

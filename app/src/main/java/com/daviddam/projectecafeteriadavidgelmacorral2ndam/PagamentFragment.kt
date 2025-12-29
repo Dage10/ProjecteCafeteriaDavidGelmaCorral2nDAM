@@ -52,8 +52,9 @@ class PagamentFragment : Fragment() {
         binding.btnPagar.setOnClickListener {
             val usuari = preferencies.getUsuari() ?: "unknown"
             val total = modelCompartit.preuTotal.value ?: 0.0
-            if (total > 0.0) {
-                vmPagament.pagar(usuari, total)
+            val productes = modelCompartit.productesSeleccionats.value ?: emptyList()
+            if (total > 0.0 && productes.isNotEmpty()) {
+                vmPagament.pagar(usuari, total, productes)
                 modelCompartit.eliminarProductes()
                 android.widget.Toast.makeText(requireContext(), "Comanda registrada", android.widget.Toast.LENGTH_SHORT).show()
             } else {

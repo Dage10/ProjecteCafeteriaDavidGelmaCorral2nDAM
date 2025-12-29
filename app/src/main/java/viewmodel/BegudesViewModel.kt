@@ -17,7 +17,7 @@ class BegudesViewModel(application: Application) : AndroidViewModel(application)
 
     init {
         val db = AppDatabase.getDatabase(application)
-        repository = Repository(db.comandaDao(), db.producteDao())
+        repository = Repository(db.comandaDao(), db.producteDao(),db.comandaProducteDao())
         begudaProductes = repository.getProductesPerCategoria("beguda")
     }
 

@@ -1,13 +1,9 @@
 package adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.daviddam.projectecafeteriadavidgelmacorral2ndam.R
 import com.daviddam.projectecafeteriadavidgelmacorral2ndam.databinding.ItemComandaBinding
-import com.daviddam.projectecafeteriadavidgelmacorral2ndam.databinding.ItemProducteBinding
 import entity.ComandaEntity
 
 class ComandaAdapter(

@@ -14,7 +14,7 @@ class HistorialViewModel(application: Application) : AndroidViewModel(applicatio
 
     init {
         val db = AppDatabase.getDatabase(application)
-        repository = Repository(db.comandaDao(), db.producteDao())
+        repository = Repository(db.comandaDao(), db.producteDao(),db.comandaProducteDao())
     }
 
     fun getOrdresUsuari(usuari: String): LiveData<List<ComandaEntity>> = repository.getOrdresUsuari(usuari)

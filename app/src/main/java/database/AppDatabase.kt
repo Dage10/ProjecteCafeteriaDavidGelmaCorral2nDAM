@@ -6,14 +6,16 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import entity.ComandaEntity
+import entity.ComandaProducteRelacioForeign
 import entity.ProducteEntity
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.Executors
 
-@Database(entities = [ComandaEntity::class, ProducteEntity::class], version = 2)
+@Database(entities = [ComandaEntity::class, ProducteEntity::class, ComandaProducteRelacioForeign::class], version = 3)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun comandaDao(): ComandaDAO
     abstract fun producteDao(): ProducteDAO
+    abstract fun comandaProducteDao(): ComandaProducteDAO
 
     companion object {
         @Volatile
@@ -25,7 +27,7 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "cafeteria_db"
-                ).fallbackToDestructiveMigration()
+                ).fallbackToDestructiveMigration(true)
                 .addCallback(object : Callback() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)

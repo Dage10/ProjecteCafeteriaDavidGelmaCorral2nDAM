@@ -14,12 +14,12 @@ class PagamentViewModel(application: Application) : AndroidViewModel(application
 
     init {
         val db = AppDatabase.getDatabase(application)
-        repository = Repository(db.comandaDao(), db.producteDao())
+        repository = Repository(db.comandaDao(), db.producteDao(),db.comandaProducteDao())
     }
 
-    fun pagar(usuari: String, total: Double) {
+    fun pagar(usuari: String, total: Double, productes: List<entity.ProducteEntity>) {
         viewModelScope.launch {
-            repository.insertComanda(ComandaEntity(usuari = usuari, total = total))
+            repository.insertComandaAmbProductes(ComandaEntity(usuari = usuari, total = total), productes)
         }
     }
 }
