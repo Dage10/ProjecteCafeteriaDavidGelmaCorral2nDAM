@@ -20,8 +20,8 @@ class ComandaAdapter(
         return ComandaViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ComandaViewHolder, position: Int) {
-        val comanda = llistaComandes[position]
+    override fun onBindViewHolder(holder: ComandaViewHolder, posicio: Int) {
+        val comanda = llistaComandes[posicio]
         holder.binding.tvComandaUsuari.text = comanda.usuari
         holder.binding.tvComandaData.text = java.text.DateFormat.getDateTimeInstance().format(java.util.Date(comanda.timestamp))
         holder.binding.tvComandaTotal.text = String.format("%.2f €", comanda.total)

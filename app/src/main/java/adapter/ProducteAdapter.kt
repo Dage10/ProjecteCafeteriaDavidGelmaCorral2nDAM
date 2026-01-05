@@ -10,18 +10,18 @@ class ProducteAdapter(
     private val llistaProductes: List<ProducteEntity>,
     private val alClicar: (ProducteEntity) -> Unit,
     private val mostrarToast: Boolean = true
-) : RecyclerView.Adapter<ProducteAdapter.ProductViewHolder>() {
+) : RecyclerView.Adapter<ProducteAdapter.ProducteViewHolder>() {
 
-    inner class ProductViewHolder(val binding: ItemProducteBinding) : RecyclerView.ViewHolder(binding.root) {}
+    inner class ProducteViewHolder(val binding: ItemProducteBinding) : RecyclerView.ViewHolder(binding.root) {}
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProducteViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemProducteBinding.inflate(inflater, parent, false)
-        return ProductViewHolder(binding)
+        return ProducteViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        val producte = llistaProductes[position]
+    override fun onBindViewHolder(holder: ProducteViewHolder, posicio: Int) {
+        val producte = llistaProductes[posicio]
         holder.binding.tvProducteNom.text = producte.nom
         holder.binding.tvProductePreu.text = "${producte.preu} €"
         holder.binding.root.setOnClickListener {

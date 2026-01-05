@@ -47,50 +47,50 @@ class HistorialFragment : Fragment() {
         val vmHistorial: viewmodel.HistorialViewModel by viewModels()
         val sharedModel: viewmodel.SharedViewModel by activityViewModels()
 
+        fun eliminar(comanda: entity.ComandaEntity) {
+            androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle("Eliminar comanda")
+                .setMessage("Segur que vols eliminar la comanda?")
+                .setPositiveButton("Eliminar") { _, _ ->
+                    vmHistorial.deleteComanda(comanda)
+                    android.widget.Toast.makeText(requireContext(), "Comanda eliminada", android.widget.Toast.LENGTH_SHORT).show()
+                }
+                .setNegativeButton("Cancel·lar", null)
+                .show()
+        }
+
+        fun editar(comanda: entity.ComandaEntity) {
+            val et = android.widget.EditText(requireContext()).apply { inputType = android.text.InputType.TYPE_CLASS_NUMBER or android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL; setText(String.format("%.2f", comanda.total)) }
+            androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle("Modificar preu").setView(et)
+                .setPositiveButton("Guardar") { _, _ ->
+                    et.text.toString().replace(',', '.').toDoubleOrNull()?.let {
+                        vmHistorial.updateComanda(comanda.copy(total = it))
+                        android.widget.Toast.makeText(requireContext(),"Comanda actualitzada", android.widget.Toast.LENGTH_SHORT).show()}}
+                .setNegativeButton("Cancel·lar", null)
+                .show()
+        }
+
         vmHistorial.getOrdresUsuari(usuari).observe(viewLifecycleOwner) { llistaComandes ->
             binding.recyclerComandes.adapter = adapter.ComandaAdapter(
                 llistaComandes,
                 onEliminar = { comanda ->
-                    androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                        .setTitle("Eliminar comanda")
-                        .setMessage("Segur que vols eliminar la comanda?")
-                        .setPositiveButton("Eliminar") { _, _ ->
-                            vmHistorial.deleteComanda(comanda)
-                            android.widget.Toast.makeText(requireContext(), "Comanda eliminada", android.widget.Toast.LENGTH_SHORT).show()
-                        }
-                        .setNegativeButton("Cancel·lar", null)
-                        .show()
+                    eliminar(comanda)
                 },
                 onEditar = { comanda ->
-                    val et = android.widget.EditText(requireContext())
-                    et.inputType = android.text.InputType.TYPE_CLASS_NUMBER or android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
-                    et.setText(String.format("%.2f", comanda.total))
-                    androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                        .setTitle("Modificar preu")
-                        .setView(et)
-                        .setPositiveButton("Guardar") { _, _ ->
-                            val text = et.text.toString().replace(',', '.')
-                            val newTotal = text.toDoubleOrNull()
-                            if (newTotal != null) {
-                                vmHistorial.updateComanda(comanda.copy(total = newTotal))
-                                android.widget.Toast.makeText(requireContext(), "Comanda actualitzada", android.widget.Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                        .setNegativeButton("Cancel·lar", null)
-                        .show()
+                    editar(comanda)
                 }
             )
         }
 
 
-        sharedModel.comandaRealitzada.observe(viewLifecycleOwner) { evt ->
-            evt?.let {
+        sharedModel.comandaRealitzada.observe(viewLifecycleOwner) { event ->
+            event?.let {
                 vmHistorial.handleComandaRealitzada()
                 sharedModel.buidarComandaRealitzada()
             }
         }
 
-        
         vmHistorial.comandaNova.observe(viewLifecycleOwner) { nova ->
             if (nova == true) {
                 android.widget.Toast.makeText(requireContext(), "Nova comanda realitzada: actualitzat historial", android.widget.Toast.LENGTH_SHORT).show()
